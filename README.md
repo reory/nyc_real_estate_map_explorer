@@ -1,16 +1,18 @@
 # 🏡 NYC Real Estate Explorer
 
-![Last Commit](https://img.shields.io/github/last-commit/reory/nyc_real_estate_explorer?cacheSeconds=60)
-![Repo Size](https://img.shields.io/github/repo-size/reory/nyc_real_estate_explorer?cacheSeconds=60)
+![Last Commit](https://img.shields.io/github/last-commit/reory/nyc_real_estate_map_explorer?cacheSeconds=60)
+![Repo Size](https://img.shields.io/github/repo-size/reory/nyc_real_estate_map_explorer?cacheSeconds=60)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
 ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
 ![SQLite](https://img.shields.io/badge/SQLite-07405E?style=for-the-badge&logo=sqlite&logoColor=white)
 ![Pandas](https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white)
+![Plotly](https://img.shields.io/badge/Plotly-%233F4F75.svg?style=for-the-badge&logo=plotly&logoColor=white)
 ![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=Streamlit&logoColor=white)
 [![SciPy](https://img.shields.io/badge/SciPy-1.x-blue.svg)](https://scipy.org/)
 [![Folium](https://img.shields.io/badge/Folium-0.16.0-orange.svg)](https://python-visualization.github.io/folium/)
 [![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-2.0-red.svg)](https://www.sqlalchemy.org/)
+
 
 The NYC Real Estate Explorer is a high-performance web dashboard engineered to transform raw real estate datasets into actionable visual insights. It provides users with an interactive, responsive map interface to explore property listings across New York, filter by price points, and gain market insights through an integrated statistical cleaning pipeline.
 
