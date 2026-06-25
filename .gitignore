@@ -1,0 +1,32 @@
+# --- Data Files ---
+*.pdf
+*.db
+*.sqlite
+*.sqlite3
+
+# --- Python & Virtual Environment ---
+venv/
+.venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.env
+.env.*
+
+# --- IDE & OS Junk ---
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+data/ny_properties_only.csv
+data/uszips.csv
+data/realtor-data.zip.csv
+uszips.xlsx
+project_notes.txt
+check_csv.py
+
+# --- Logs & Temp ---
+*.log
+*.tmp

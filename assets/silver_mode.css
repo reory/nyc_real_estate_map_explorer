@@ -1,0 +1,53 @@
+/* Main application body viewport */
+[data-testid="stAppViewContainer"] {
+    background-color: #f8f9fa;
+    color: #212529;
+}
+
+/* Sidebar navigation panel background */
+[data-testid="stSidebar"] {
+    background-color: #e9ecef;
+    border-right: 1px solid #dee2e6;
+}
+
+/* Top structural header bar transparency adjustment */
+[data-testid="stHeader"] {
+    background-color: rgba(248, 249, 250, 0.6) !important;
+}
+
+/* Target markdown fields, form labels, and headings strictly without breaking alerts */
+h1, h2, h3, h4, h5, h6, p, label, .stMarkdown {
+    color: #212529 !important;
+}
+
+/* Interactive Control Buttons */
+.stButton>button {
+    background-color: #ffffff !important;
+    color: #212529 !important;
+    border: 1px solid #ced4da !important;
+    border-radius: 6px !important;
+    transition: all 0.25s ease-in-out !important;
+    width: 100%;
+}
+
+/* Button Hover State Integration */
+.stButton>button:hover {
+    background-color: #e9ecef !important;
+    border-color: #FF4B4B !important; /* Streamlit signature red highlight */
+    color: #FF4B4B !important;
+}
+
+/* Reduce the default empty space at the top of the app */
+[data-testid="stAppViewContainer"] .block-container {
+    padding-top: 1.5rem !important;
+}
+
+/* Format and position the clock widget at the absolute top center */
+.top-clock-widget {
+    text-align: center;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #333333 !important;
+    margin-bottom: 1rem;
+    letter-spacing: 0.5px;
+}
