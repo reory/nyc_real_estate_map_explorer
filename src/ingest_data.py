@@ -1,5 +1,6 @@
 import pandas as pd
-from .database import Session, USAProperty, engine, Base
+
+from .database import Base, Session, USAProperty, engine
 
 # Initialize the database
 Base.metadata.create_all(engine)

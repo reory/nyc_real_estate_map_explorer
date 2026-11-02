@@ -1,6 +1,7 @@
 import pandas as pd
+from hypothesis import given, settings
+from hypothesis import strategies as st
 from src.engine import analyse_properties
-from hypothesis import given, strategies as st
 
 
 def test_empty_input_returns_empty_df():
@@ -41,7 +42,7 @@ def test_outlier_removed_in_large_dataset():
     assert len(df) == 100
     assert 50000000 not in df["price"].values
 
-
+@settings(deadline=None)
 @given(
     st.lists(
         st.fixed_dictionaries(

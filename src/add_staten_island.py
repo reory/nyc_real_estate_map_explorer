@@ -13,7 +13,7 @@ try:
     # Isolate Staten Island rows
     si_rows = large_df[
         (large_df['state'].str.lower() == 'new york') & 
-        (large_df['city'].str.lower().str.contains('staten|tottenville|st\. george', na=False))
+        (large_df['city'].str.lower().str.contains(r'staten|tottenville|st\. george', na=False))
     ].copy()
     
     if si_rows.empty:
@@ -41,5 +41,12 @@ try:
         print(f"🎉 Success! Combined file now has {len(combined_df):,} total rows.")
         print(f"📂 Updated file saved at: {target_csv_path}")
 
-except Exception as e:
+except (
+    OSError,
+    UnicodeDecodeError,
+    KeyError,
+    AttributeError,
+    pd.errors.EmptyDataError,
+    pd.errors.ParserError,
+    ) as e:
     print(f"❌ Error occurred: {e}")

@@ -1,7 +1,8 @@
-import streamlit as st
-import folium
-from folium.plugins import MarkerCluster
 import math
+
+import folium
+import streamlit as st
+from folium.plugins import MarkerCluster
 
 
 def get_hex_color(price):
@@ -45,13 +46,11 @@ def generate_full_map(properties=None):
 
     # Helper function to identify missing, blank, or NaN data formats safely
     def is_missing(val):
-        if val is None:
-            return True
-        if isinstance(val, float) and math.isnan(val):
-            return True
-        if isinstance(val, str) and val.strip().lower() in ("nan", "n/a", ""):
-            return True
-        return False
+        return (
+            val is None
+        or (isinstance(val, float) and math.isnan(val))
+        or (isinstance(val, str) and val.strip().lower() in ("nan", "n/a", ""))
+    )
 
     # Build map markers
     for prop in properties:

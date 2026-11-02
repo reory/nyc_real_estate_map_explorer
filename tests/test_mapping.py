@@ -1,6 +1,7 @@
 import folium
-from src.mapping import get_hex_color, generate_full_map
-from hypothesis import given, strategies as st
+from hypothesis import given
+from hypothesis import strategies as st
+from src.mapping import generate_full_map, get_hex_color
 
 
 def test_get_hex_color_low_price():

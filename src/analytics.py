@@ -1,5 +1,6 @@
 import plotly.express as px
 
+
 def clean_borough_name(row):
     """
     Maps all messy NYC neighborhood text strings directly to 
@@ -81,7 +82,7 @@ def clean_borough_name(row):
 
     # Fallback for true geographic outsiders
     city_lower = city.lower()
-    if "brooklyn" in city_lower: #
+    if "brooklyn" in city_lower:
         return "Brooklyn"
     if "queens" in city_lower: 
         return "Queens"

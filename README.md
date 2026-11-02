@@ -4,58 +4,96 @@
 ![Repo Size](https://img.shields.io/github/repo-size/reory/nyc_real_estate_map_explorer?cacheSeconds=60)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
-![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
-![SQLite](https://img.shields.io/badge/SQLite-07405E?style=for-the-badge&logo=sqlite&logoColor=white)
+[![Folium](https://img.shields.io/badge/Folium-0.16.0-orange.svg)](https://python-visualization.github.io/folium/)
 ![Pandas](https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white)
 ![Plotly](https://img.shields.io/badge/Plotly-%233F4F75.svg?style=for-the-badge&logo=plotly&logoColor=white)
-![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=Streamlit&logoColor=white)
+![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
 [![SciPy](https://img.shields.io/badge/SciPy-1.x-blue.svg)](https://scipy.org/)
-[![Folium](https://img.shields.io/badge/Folium-0.16.0-orange.svg)](https://python-visualization.github.io/folium/)
+![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=Streamlit&logoColor=white)
 [![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-2.0-red.svg)](https://www.sqlalchemy.org/)
-
+![SQLite](https://img.shields.io/badge/SQLite-07405E?style=for-the-badge&logo=sqlite&logoColor=white)
 
 The NYC Real Estate Explorer is a high-performance web dashboard engineered to transform raw real estate datasets into actionable visual insights. It provides users with an interactive, responsive map interface to explore property listings across New York, filter by price points, and gain market insights through an integrated statistical cleaning pipeline.
 
 ---
 
+## 📑 Table of Contents
+
+- [Why Was This Project Built](#-problem)
+- [Screenshots](#-screenshots)
+- [Key Features](#-key-features)
+- [Project Structure](#-project-structure)
+- [Getting Started](#-getting-started)
+- [Launch The Application](#-launch-the-application)
+- [Tech Stack](#-tech-stack)
+- [Troubleshooting](#️-troubleshooting)
+- [Testing](#-testing)
+- [Roadmap Features](#️-roadmap-features)
+
+---
+
+## 🎯 Problem
+
+- Large property datasets can be difficult to interpret using spreadsheets alone.
+- Property locations, pricing trends, and neighbourhood patterns are often hidden within thousands of records.
+- Extreme outlier values can distort analysis and visualisations.
+
+## ✅ Solution
+
+- Clean and process real estate data using Pandas and SciPy.
+- Automatically detect and filter statistical outliers.
+- Store and manage property records using SQLite and SQLAlchemy.
+- Visualise listings through an interactive Folium map.
+- Enable real-time filtering and exploration with a Streamlit dashboard.
+
+---
+
 ## 📸 Screenshots
-Light Mode
-![Light Mode](screenshots/lightmode.png)
-Dark Mode
-![Dark Mode](screenshots/darkmode.png)
-Selection of properties in NYC between $500k and $1M
-![Properties of New York](screenshots/newyork1.png)
-Advanced Analytics of property prices and house sizes in NYC
-![Advanced Analytics](screenshots/analyticsadvanced1.png)
-A property in Staten Island/Richmond
-![Property in Richomond](screenshots/richmondpropertyprice.png)
+
+<p align="center">
+  <strong>Light Mode</strong><br>
+  <img src="screenshots/lightmode.png" alt="Light Mode" width="90%">
+</p>
+
+<p align="center">
+  <strong>Dark Mode</strong><br>
+  <img src="screenshots/darkmode.png" alt="Dark Mode" width="90%">
+</p>
+
+<p align="center">
+  <strong>Property Explorer</strong><br>
+  <img src="screenshots/newyork1.png" alt="Properties of New York" width="90%">
+</p>
+
+<p align="center">
+  <strong>Advanced Analytics Dashboard</strong><br>
+  <img src="screenshots/analyticsadvanced1.png" alt="Advanced Analytics" width="90%">
+</p>
+
+<p align="center">
+  <strong>Property Detail View</strong><br>
+  <img src="screenshots/richmondpropertyprice.png" alt="Richmond Property" width="90%">
+</p>
 
 ---
 
 ## 🚀 Key Features
 
-- Interactive Geospatial Visualization: Powered by `Folium` and `Streamlit`, utilizing marker clustering to represent high-density real estate data clearly.
-
-### Intelligent Data Science Pipeline:
-
-- Automated Cleaning: Uses `Pandas` to sanitize input data and handle null values.
-
-- Statistical Outlier Detection: Integrates a `SciPy` engine to calculate Z-scores, automatically filtering out extreme price anomalies that would otherwise distort map clustering.
-
-### Performance Engineered:
-
-- Dynamic Caching: Leverages @st.cache_data and @st.cache_resource for rapid state management and reduced load times.
-
-- Render Optimization: Implements strict data capping (500 markers) to ensure the web browser remains responsive.
-
-- User-Centric Interface: Features intuitive sidebar controls, visual price tier legends, and real-time feedback on search results.
+- Interactive Folium property maps
+- Marker clustering for high-density datasets
+- Statistical outlier detection using SciPy
+- Automated data cleaning with Pandas
+- Dynamic Streamlit dashboard
+- SQLite-backed property storage
+- Real-time price filtering
+- Cached data loading for improved performance
+- Dark and light mode support
 
 ---
 
 ## 📁 Project Structure
-The project is architected for modularity and maintainability, cleanly separating the Data Layer, Analytics Engine, and Frontend Visualizer.
 
-```python
+```plaintext
 nyc_real_estate_map_explorer/
 ├── app.py              # Main Application Orchestrator
 ├── requirements.txt    # Project dependencies
@@ -74,16 +112,15 @@ nyc_real_estate_map_explorer/
 ---
 
 ## 🚀 Getting Started
+
 - Prerequisites
 - Python 3.10 or higher.
 
-- pip package manager.
-
 ### Installation
-Clone the repository:
+- Clone the repository:
 
 ```Bash
-git clone <your-repository-url>
+git clone https://github.com/reory/nyc_real_estate_map_explorer.git
 cd nyc_real_estate_map_explorer
 ```
 ### Set up the Virtual Environment:
@@ -98,32 +135,58 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-### Launch the Application:
+---
+
+## 🚀 Launch the Application:
 
 ```Bash
 streamlit run app.py
 ```
+Users can:
+- Browse available property listings.
+- Filter by price range.
+- Explore different boroughs.
+- View property details via map popups.
+- Analyse market patterns through interactive visualisations
 
 ---
 
-## ⚒️ Tech Stack
-- Framework: `Streamlit`
+## 👨🏽‍💻 Tech Stack
 
-- Geospatial: `Folium`, `Streamlit-Folium`
+### Streamlit 
+- Interactive application framework. 
 
-- Data Analysis: `Pandas`, `SciPy`
+### Folium 
+- Geospatial mapping and clustering.
 
-- ORM: `SQLAlchemy`
+### Pandas 
+- Data cleaning and analysis. 
+
+### SciPy 
+- Statistical processing and outlier detection. 
+
+### SQLAlchemy 
+- Database abstraction and ORM management. ### SQLite Local data persistence layer.
 
 ---
 
-## 🔬Troubleshooting
+## 🕵🏼‍♀️ Troubleshooting
 
 Map not rendering? Verify that you are running the app in a modern browser with hardware acceleration enabled.
 
 Data Missing? Ensure the data/ directory contains your source `CSV` or `SQLite` file.
 
 Outlier Filtering? The `engine.py` pipeline uses a Z-score cutoff of 3. If you need to include extreme properties, you can adjust this threshold in `src/engine.py`.
+
+---
+
+## 🧪 Testing
+
+This project uses **pytest** to validate core data processing, database operations, and analytical workflows.
+
+```bash
+pytest
+```
 
 ---
 

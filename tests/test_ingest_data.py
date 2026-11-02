@@ -1,39 +1,28 @@
 import pandas as pd
-import src.ingest_data as ingest_data
+from src import ingest_data
 
 
 def test_ingest_adds_valid_properties(monkeypatch):
+    # A single mock DataFrame simulating "data/nyc_properties_clean.csv" 
+    # which already has lat/lng coordinates merged in.
+    mock_merged_df = pd.DataFrame({
+        "zip_code": ["10001"],
+        "status": ["for_sale"],
+        "price": [500000],
+        "bed": [2],
+        "bath": [1],
+        "acre_lot": [0.1],
+        "city": ["NYC"],
+        "state": ["New York"],
+        "house_size": [900],
+        "prev_sold_date": ["2020-01-01"],
+        "lat": [40.75],
+        "lng": [-73.99],
+    })
 
-    # Fake ZIP coordinate CSV
-    zips_df = pd.DataFrame(
-        {
-            "zip": ["10001"],
-            "lat": [40.75],
-            "lng": [-73.99],
-        }
-    )
-
-    # Fake NY properties CSV
-    props_df = pd.DataFrame(
-        {
-            "zip_code": ["10001"],
-            "status": ["for_sale"],
-            "price": [500000],
-            "bed": [2],
-            "bath": [1],
-            "acre_lot": [0.1],
-            "city": ["NYC"],
-            "state": ["New York"],
-            "house_size": [900],
-            "prev_sold_date": ["2020-01-01"],
-        }
-    )
-
-    # Patch pandas.read_csv
-    def fake_read_csv(path, dtype=None):
-        if "uszips" in path:
-            return zips_df
-        return props_df
+    # Since ingest() only reads one CSV, return the complete DataFrame
+    def fake_read_csv(path, *args, **kwargs):
+        return mock_merged_df
 
     monkeypatch.setattr(pd, "read_csv", fake_read_csv)
 
@@ -43,16 +32,14 @@ def test_ingest_adds_valid_properties(monkeypatch):
 
     class DummySession:
         def add(self, obj):
-
             added.append(obj)
 
         def commit(self):
-
             committed.append(True)
 
     dummy_session = DummySession()
 
-    # Patch BOTH Session() AND the module-level session
+    # Patch both Session and the active module session reference
     monkeypatch.setattr(ingest_data, "Session", lambda: dummy_session)
     monkeypatch.setattr(ingest_data, "session", dummy_session)
 
@@ -72,36 +59,24 @@ def test_ingest_adds_valid_properties(monkeypatch):
 
 def test_ingest_skips_missing_coordinates(monkeypatch):
 
-    # ZIP CSV with missing lat/lng
-    zips_df = pd.DataFrame(
-        {
-            "zip": ["10001"],
-            "lat": [None],
-            "lng": [None],
-        }
-    )
+    # Mock DataFrame where coordinate information is missing/NaN
+    mock_corrupted_df = pd.DataFrame({
+        "zip_code": ["10001"],
+        "status": ["for_sale"],
+        "price": [500000],
+        "bed": [2],
+        "bath": [1],
+        "acre_lot": [0.1],
+        "city": ["NYC"],
+        "state": ["New York"],
+        "house_size": [900],
+        "prev_sold_date": ["2020-01-01"],
+        "lat": [None],
+        "lng": [None],
+    })
 
-    # NY properties CSV
-    props_df = pd.DataFrame(
-        {
-            "zip_code": ["10001"],
-            "status": ["for_sale"],
-            "price": [500000],
-            "bed": [2],
-            "bath": [1],
-            "acre_lot": [0.1],
-            "city": ["NYC"],
-            "state": ["New York"],
-            "house_size": [900],
-            "prev_sold_date": ["2020-01-01"],
-        }
-    )
-
-    def fake_read_csv(path, dtype=None):
-
-        if "uszips" in path:
-            return zips_df
-        return props_df
+    def fake_read_csv(path, *args, **kwargs):
+        return mock_corrupted_df
 
     monkeypatch.setattr(pd, "read_csv", fake_read_csv)
 
@@ -114,7 +89,9 @@ def test_ingest_skips_missing_coordinates(monkeypatch):
         def commit(self):
             pass
 
-    monkeypatch.setattr(ingest_data, "Session", lambda: DummySession())
+    dummy_session = DummySession()
+    monkeypatch.setattr(ingest_data, "Session", lambda: dummy_session)
+    monkeypatch.setattr(ingest_data, "session", dummy_session)
 
     ingest_data.ingest()
 

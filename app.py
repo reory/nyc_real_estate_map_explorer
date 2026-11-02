@@ -1,16 +1,19 @@
-import os
 import datetime
 import math
+import os
+
 import streamlit as st
-from streamlit_folium import st_folium
-from src.database import get_filtered_properties
-from src.mapping import generate_full_map
-from src.engine import analyse_properties
+import timezone
 from src.analytics import (
+    clean_borough_name,
     generate_borough_price_box,
     generate_size_vs_price_scatter,
-    clean_borough_name,
 )
+from src.database import get_filtered_properties
+from src.engine import analyse_properties
+from src.mapping import generate_full_map
+from streamlit_folium import st_folium
+
 
 def apply_local_css(file_path):
     """Function to inject custom CSS safely."""
@@ -38,7 +41,7 @@ else:
     apply_local_css("assets/silver_mode.css")
 
 # This calculates the system time on the server thread instantly during execution
-current_time = datetime.datetime.now()
+current_time = datetime.datetime.now(timezone.utc)
 date_string = current_time.strftime("%A, %B %d, %Y")
 time_string = current_time.strftime("%I:%M %p")
 
@@ -161,15 +164,13 @@ if st.session_state.show_map and st.session_state.filtered_data is not None:
 
         col1, col2 = st.columns(2)
 
-        with col1:
-            with st.spinner("Generating House Price Distributions..."):
-                box_chart = generate_borough_price_box(processed_df)
-                st.plotly_chart(box_chart, width="stretch")
+        with col1, st.spinner("Generating House Price Distributions..."):
+            box_chart = generate_borough_price_box(processed_df)
+            st.plotly_chart(box_chart, width="stretch")
 
-        with col2:
-            with st.spinner("Generating House Sizes..."):
-                scatter_chart = generate_size_vs_price_scatter(processed_df)
-                st.plotly_chart(scatter_chart, width="stretch")
+        with col2, st.spinner("Generating House Sizes..."):
+            scatter_chart = generate_size_vs_price_scatter(processed_df)
+            st.plotly_chart(scatter_chart, width="stretch")
 
     else:
         st.warning("🚫 No properties found for this price range.")
