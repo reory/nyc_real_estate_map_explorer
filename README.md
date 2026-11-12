@@ -29,6 +29,7 @@ The NYC Real Estate Explorer is a high-performance web dashboard engineered to t
 - [Troubleshooting](#️-troubleshooting)
 - [Testing](#-testing)
 - [Roadmap Features](#️-roadmap-features)
+- [Notes](#-notes)
 
 ---
 
@@ -53,27 +54,35 @@ The NYC Real Estate Explorer is a high-performance web dashboard engineered to t
 ## 📸 Screenshots
 
 <p align="center">
-  <strong>Light Mode</strong><br>
+  <strong>Property Search Dashboard</strong><br>
+
+  Filter listings by price range and boroughs using the sidebar controls before generating an interactive
   <img src="screenshots/lightmode.png" alt="Light Mode" width="90%">
 </p>
 
 <p align="center">
-  <strong>Dark Mode</strong><br>
+  <strong>Property Search Dashboard Dark Mode</strong><br>
   <img src="screenshots/darkmode.png" alt="Dark Mode" width="90%">
 </p>
 
 <p align="center">
-  <strong>Property Explorer</strong><br>
+  <strong>Interactive Property Map</strong><br>
+
+  Explore New York property listings through an interactive Folium map featuring marker clustering, dynamic price filtering, and colour-coded property price tiers.
   <img src="screenshots/newyork1.png" alt="Properties of New York" width="90%">
 </p>
 
 <p align="center">
-  <strong>Advanced Analytics Dashboard</strong><br>
+  <strong>Advanced Market Analytics Dashboard</strong><br>
+
+  Explore borough-level pricing trends with interactive box plots and analyze the relationship between house size and listing price using dynamic Plotly visualizations.
   <img src="screenshots/analyticsadvanced1.png" alt="Advanced Analytics" width="90%">
 </p>
 
 <p align="center">
-  <strong>Property Detail View</strong><br>
+  <strong>Interactive Property Detail View</strong><br>
+
+  Select individual property markers to view detailed listing information, including price, bedrooms, bathrooms, living area, lot size, and location.
   <img src="screenshots/richmondpropertyprice.png" alt="Richmond Property" width="90%">
 </p>
 
@@ -217,6 +226,12 @@ pytest
 
 - [ ] Integrate a `st.download_button` that allows users to export the current filtered dataset into a `CSV` file.
 Provides high-value offline utility, enabling users to move their research into `Excel` or `Google` Sheets for deeper personal analysis.
+
+---
+
+## 📝 Notes:
+
+- CartoDB has been replaced by OpenStreetMap
 
 ---
 
