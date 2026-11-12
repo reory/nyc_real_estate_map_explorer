@@ -25,7 +25,8 @@ def ingest():
 
         if pd.isna(latitude) or pd.isna(longitude):
             continue
-
+        
+        # Create property record from source data
         prop = USAProperty(
             status=row["status"],
             price=row["price"],

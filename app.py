@@ -3,7 +3,8 @@ import math
 import os
 
 import streamlit as st
-import timezone
+from streamlit_folium import st_folium
+
 from src.analytics import (
     clean_borough_name,
     generate_borough_price_box,
@@ -12,7 +13,6 @@ from src.analytics import (
 from src.database import get_filtered_properties
 from src.engine import analyse_properties
 from src.mapping import generate_full_map
-from streamlit_folium import st_folium
 
 
 def apply_local_css(file_path):
@@ -41,7 +41,7 @@ else:
     apply_local_css("assets/silver_mode.css")
 
 # This calculates the system time on the server thread instantly during execution
-current_time = datetime.datetime.now(timezone.utc)
+current_time = datetime.datetime.now(datetime.UTC)
 date_string = current_time.strftime("%A, %B %d, %Y")
 time_string = current_time.strftime("%I:%M %p")
 
@@ -79,9 +79,10 @@ borough_filter = st.sidebar.selectbox(
     ["All Boroughs", "Manhattan", "Brooklyn", "Queens", "The Bronx", "Staten Island"]
 )
 
-
 # Filter application with callback
 def apply_filters():
+    """Apply user filters and refresh property results."""
+
     st.session_state.min_price = min_price
     st.session_state.max_price = max_price
     st.session_state.filtered_data = get_filtered_properties(

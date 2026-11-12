@@ -39,6 +39,7 @@ def create_ny_only_csv(properties_csv_path, zips_csv_path, output_csv_path):
     print(f" Success! created {output_csv_path} with {len(nyc_properties):,} rows restricted entirely to NYC.")
 
 
+# Build cleaned NYC property dataset
 create_ny_only_csv(
     properties_csv_path="data/ny_properties_only.csv",
     zips_csv_path="data/uszips.csv",

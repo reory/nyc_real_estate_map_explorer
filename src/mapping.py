@@ -37,7 +37,7 @@ def generate_full_map(properties=None):
     nyc_map = folium.Map(
         location=[40.7128, -74.0060],
         zoom_start=9,
-        tiles="cartodbpositron",
+        tiles="OpenStreetMap",
         prefer_canvas=True,
     )
 
@@ -46,6 +46,7 @@ def generate_full_map(properties=None):
 
     # Helper function to identify missing, blank, or NaN data formats safely
     def is_missing(val):
+        """Check whether a value should be tread as missing."""
         return (
             val is None
         or (isinstance(val, float) and math.isnan(val))
@@ -98,7 +99,7 @@ def generate_full_map(properties=None):
         </div>
         """
 
-        # CircleMarker
+        # Add property marker to cluster
         folium.CircleMarker(
             location=[float(lat), float(lon)],
             radius=5,

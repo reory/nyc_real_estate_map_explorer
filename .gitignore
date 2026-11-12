@@ -14,6 +14,9 @@ __pycache__/
 .pytest_cache/
 .env
 .env.*
+*.ruff_cache/
+*.hypothesis/
+*.xml
 
 # --- IDE & OS Junk ---
 .DS_Store

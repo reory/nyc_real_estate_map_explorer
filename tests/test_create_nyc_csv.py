@@ -1,14 +1,19 @@
 # Mock pandas so no real CSV files are touched.
 
 import pandas as pd
+
 from src.create_nyc_csv import create_ny_only_csv
 
 
 def test_create_nyc_only_csv(monkeypatch):
+    """Verify non-NYC properties are filtered from the exported dataset."""
+
     saved = {}
 
-    # Dynamically return mock data based on the file type being read
+
     def fake_read_csv(path, *args, **kwargs):
+        """Dynamically return mock data based on the file type being read"""
+
         if "zips" in str(path) or "uszips" in str(path):
             # Mock ZIP reference file
             return pd.DataFrame({
@@ -26,6 +31,8 @@ def test_create_nyc_only_csv(monkeypatch):
             })
 
     def fake_to_csv(self, path, *args, **kwargs):
+        """Capture CSV export details without writing a file."""
+
         saved["path"] = path
         saved["rows"] = len(self)
 

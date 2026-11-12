@@ -19,7 +19,7 @@ The NYC Real Estate Explorer is a high-performance web dashboard engineered to t
 
 ## 📑 Table of Contents
 
-- [Why Was This Project Built](#-problem)
+- [Why Was This Project Built](#-why-was-this-project-built)
 - [Screenshots](#-screenshots)
 - [Key Features](#-key-features)
 - [Project Structure](#-project-structure)
@@ -32,13 +32,15 @@ The NYC Real Estate Explorer is a high-performance web dashboard engineered to t
 
 ---
 
-## 🎯 Problem
+## 🧠 Why Was This Project Built
+
+### 🎯 Problem
 
 - Large property datasets can be difficult to interpret using spreadsheets alone.
 - Property locations, pricing trends, and neighbourhood patterns are often hidden within thousands of records.
 - Extreme outlier values can distort analysis and visualisations.
 
-## ✅ Solution
+### ✅ Solution
 
 - Clean and process real estate data using Pandas and SciPy.
 - Automatically detect and filter statistical outliers.
@@ -95,17 +97,21 @@ The NYC Real Estate Explorer is a high-performance web dashboard engineered to t
 
 ```plaintext
 nyc_real_estate_map_explorer/
-├── app.py              # Main Application Orchestrator
-├── requirements.txt    # Project dependencies
+├── assets/             # Logos, icons, and custom CSS
+├── data/               # SQLite Databases & Source CSV files
+├── screenshots/        # Screenshots of the Dashboard in action
 ├── src/                # Source Code folder
 │   ├── database.py     # SQLAlchemy Models & Data Retrieval
 │   ├── create_nyc_csv.py # Create CSV file for the project
 │   ├── peek.py         # Peek at the DB to see if it matches with USAProperty model
-│   ├── ingest_data.py  # Initialise the DB 
+│   ├── ingest_data.py  # Initialise the DB
 │   ├── engine.py       # Pandas/SciPy Analysis & Outlier Detection
 │   └── mapping.py      # Folium Map Generation & Cluster Logic
-├── data/               # SQLite Databases & Source CSV files
-├── assets/             # Logos, icons, and custom CSS
+├── tests/              # Testing suite
+├── app.py              # Main Application Orchestrator
+├── CONTRIBUTING.md     # Contribute to project
+├── LICENSE.md          # MIT License
+├── pyproject.toml      # Project dependencies
 └── README.md           # Project Documentation
 ```
 
@@ -113,26 +119,34 @@ nyc_real_estate_map_explorer/
 
 ## 🚀 Getting Started
 
-- Prerequisites
-- Python 3.10 or higher.
+### Prerequisites
 
-### Installation
+- Python 3.11 or higher.
+- uv package manager
+
+### Installation:
+
 - Clone the repository:
 
 ```Bash
 git clone https://github.com/reory/nyc_real_estate_map_explorer.git
 cd nyc_real_estate_map_explorer
 ```
+
 ### Set up the Virtual Environment:
 
 ```Bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+uv .venv python 3.11
+# On Linux/macOS
+source venv/bin/activate
+# On Windows:
+.venv/Scripts/activate 
 ```
+
 ### Install Dependencies:
 
 ```Bash
-pip install -r requirements.txt
+uv sync
 ```
 
 ---
@@ -142,6 +156,7 @@ pip install -r requirements.txt
 ```Bash
 streamlit run app.py
 ```
+
 Users can:
 - Browse available property listings.
 - Filter by price range.

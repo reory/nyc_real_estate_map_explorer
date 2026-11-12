@@ -6,6 +6,7 @@ def clean_borough_name(row):
     Maps all messy NYC neighborhood text strings directly to 
     their official 5 boroughs using a high-speed lookup map.
     """
+
     # Standardize inputs
     city = str(row.get("city", "")).strip().title()  # e.g., "bed stuy" -> "Bed Stuy"
     county = str(row.get("county_name", "")).lower().strip()
@@ -97,23 +98,13 @@ def clean_borough_name(row):
         return "Outside NYC"
     return "Other NYC"
 
+
 def generate_borough_price_box(df):
     """Generate a box plot showing price distributions per borough."""
     
     # Create a copy and build the Borough column dynamically
     local_df = df.copy()
     local_df["Borough"] = local_df.apply(clean_borough_name, axis=1)
-# -------------------------------------------------------------------------------
-    # PRINT DIAGNOSTIC
-    #print("\n🔍 --- TARGETING 'OTHER NYC' STRINGS ---")
-    #other_df = local_df[local_df["Borough"] == "Other NYC"]
-    #if not other_df.empty:
-        #print("Exact unique cities found:", other_df["city"].unique().tolist())
-        #print("Exact unique counties found:", other_df["county_name"].unique().tolist())
-   # else:
-        #print("No records left in Other NYC!")
-    #print("---------------------------------------------------\n")
-# -----------------------------------------------------------------------------
     local_df = local_df[local_df["Borough"] != "Outside NYC"]
 
     fig = px.box(
@@ -135,6 +126,7 @@ def generate_borough_price_box(df):
 
     return fig
 
+
 def generate_size_vs_price_scatter(df):
     """Generate a scatter plot comparing house sizes to price."""
 
@@ -145,6 +137,7 @@ def generate_size_vs_price_scatter(df):
     # Filter out rows with missing sizes to keep the plot manageable
     clean_df = local_df[local_df["house_size"].notna() & (local_df["house_size"] > 0) & (local_df["house_size"] < 10000)]
 
+    # Compare property size and price by borough
     fig = px.scatter(
         clean_df,
         x="house_size",
@@ -158,3 +151,16 @@ def generate_size_vs_price_scatter(df):
 
     fig.update_layout(template="plotly_white")
     return fig
+
+
+# -------------------------------------------------------------------------------
+    # DEBUG PRINT DIAGNOSTIC
+    #print("\n🔍 --- TARGETING 'OTHER NYC' STRINGS ---")
+    #other_df = local_df[local_df["Borough"] == "Other NYC"]
+    #if not other_df.empty:
+        #print("Exact unique cities found:", other_df["city"].unique().tolist())
+        #print("Exact unique counties found:", other_df["county_name"].unique().tolist())
+   # else:
+        #print("No records left in Other NYC!")
+    #print("---------------------------------------------------\n")
+# -----------------------------------------------------------------------------

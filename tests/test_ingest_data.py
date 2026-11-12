@@ -1,8 +1,11 @@
 import pandas as pd
+
 from src import ingest_data
 
 
 def test_ingest_adds_valid_properties(monkeypatch):
+    """Verify valid property records are ingested and committed."""
+
     # A single mock DataFrame simulating "data/nyc_properties_clean.csv" 
     # which already has lat/lng coordinates merged in.
     mock_merged_df = pd.DataFrame({
@@ -22,6 +25,8 @@ def test_ingest_adds_valid_properties(monkeypatch):
 
     # Since ingest() only reads one CSV, return the complete DataFrame
     def fake_read_csv(path, *args, **kwargs):
+        """Return mock property data for ingestion tests."""
+
         return mock_merged_df
 
     monkeypatch.setattr(pd, "read_csv", fake_read_csv)
@@ -31,10 +36,16 @@ def test_ingest_adds_valid_properties(monkeypatch):
     committed = []
 
     class DummySession:
+        """Mock database session for ingestion testing."""
+
         def add(self, obj):
+            """Capture added property records."""
+
             added.append(obj)
 
         def commit(self):
+            """Track database commit operations."""
+
             committed.append(True)
 
     dummy_session = DummySession()
@@ -58,6 +69,7 @@ def test_ingest_adds_valid_properties(monkeypatch):
 
 
 def test_ingest_skips_missing_coordinates(monkeypatch):
+    """Verify properties without coordinates are skipped."""
 
     # Mock DataFrame where coordinate information is missing/NaN
     mock_corrupted_df = pd.DataFrame({
@@ -76,6 +88,8 @@ def test_ingest_skips_missing_coordinates(monkeypatch):
     })
 
     def fake_read_csv(path, *args, **kwargs):
+        """Return property data with missing coordinates."""
+
         return mock_corrupted_df
 
     monkeypatch.setattr(pd, "read_csv", fake_read_csv)
@@ -83,11 +97,16 @@ def test_ingest_skips_missing_coordinates(monkeypatch):
     added = []
 
     class DummySession:
+        """Mock database session for ingestion testing."""
+
         def add(self, obj):
+            """Capture added property records."""
+
             added.append(obj)
 
         def commit(self):
-            pass
+            """Mock database commit operation."""
+
 
     dummy_session = DummySession()
     monkeypatch.setattr(ingest_data, "Session", lambda: dummy_session)

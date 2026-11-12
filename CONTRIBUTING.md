@@ -1,44 +1,104 @@
 # Contributing to NYC Real Estate Explorer
 
-Welcome! Whether it's reporting a bug, improving the documentation, or adding a new feature, your help is appreciated.
+Thank you for your interest in contributing to NYC Real Estate Explorer! Whether you're fixing a bug, improving documentation, expanding test coverage, or proposing new features, contributions are welcome.
+
+## 👨🏽‍💻 Development Setup
+
+### Prerequisites
+- Python 3.11+
+- uv package manager
+
+### Clone the Repository
+
+```bash
+git clone https://github.com/reory/nyc_real_estate_map_explorer.git
+cd nyc_real_estate_map_explorer
+```
+
+### Create a Virtual Environment
+
+```bash
+uv venv --python 3.11
+# Linux/MacOS
+source .venv/bin/activate
+# Windows
+.venv\Scripts\activate
+```
+
+### Install Dependencies
+
+```bash
+uv sync
+```
+
+### Launch the Application
+
+```bash
+streamlit run app.py
+```
 
 ---
 
-## How to Contribute
+## 🧪 Running Tests
 
-1. **Fork the Repository**: Click the 'Fork' button on GitHub to create your own copy of the project.
-2. **Create a Feature Branch**: Work on your changes in a new branch (e.g., `git checkout -b feature/my-awesome-feature`).
-3. **Commit Changes**: Make your changes and commit them with descriptive messages.
-4. **Push to Branch**: Push your changes to your forked repository.
-5. **Submit a Pull Request**: Submit a Pull Request (PR) to the main repository.
+Run the full test suite:
 
----
+```bash
+pytest
+```
 
-## Project Structure & Standards
+Generate a coverage report:
 
-Please respect the existing modular architecture:
-* **`app.py`**: Avoid adding heavy logic here. Keep it as the UI orchestrator.
-* **`src/engine.py`**: New data analysis logic belongs here. Please add unit tests if possible.
-* **`src/database.py`**: Any new database queries or models should follow existing patterns.
-* **`src/mapping.py`**: New map visualizations or layer logic go here.
+```bash
+pytest
+```
 
 ---
 
-## Reporting Bugs
-If you find a bug, please open an issue on the GitHub repository. Be sure to include:
-* A clear description of the issue.
-* Steps to reproduce it.
-* Screenshots or logs if applicable.
+## 📁 Project Structure
+
+Please follow the existing modular architecture:
+
+- **app.py** - Streamlit UI and application orchestration.
+- **src/database.py** - SQLAlchemy models and database access.
+- **src/engine.py** - Pandas and SciPy analysis logic.
+- **src/mapping.py** - Folium map generation and visualisation.
+- **src/ingest_data.py** - Data ingestion pipeline.
+- **src/create_nyc_csv.py** - Dataset preparation utilities.
+- **tests/** - Pytest test suite.
+
+## Coding Standards
+
+- Keep functions focused and single-purpose.
+- Add or update tests when introducing new functionality.
+- Use concise docstrings and comments.
+- Maintain existing formatting and project structure.
+- Run tests before submitting changes.
+
+## Pull Request Process
+
+1. Fork the repository.
+2. Create a feature branch.
+
+```bash
+git checkout -b feature/my-new-feature
+```
+
+3. Commit your changes with a clear commit message.
+4. Push your branch.
+5. Open a Pull Request describing your changes.
+
+## Reporting Issues
+
+When reporting bugs, please include:
+
+- A clear description of the issue.
+- Steps to reproduce it.
+- Expected behaviour.
+- Screenshots or logs where applicable.
 
 ---
 
-## Development Setup
-Ensure you have the environment set up as per the `README.md`:
-1. `python -m venv venv`
-2. `source venv/bin/activate`
-3. `pip install -r requirements.txt`
-4. `streamlit run app.py`
+Thank you for helping improve NYC Real Estate Explorer! 🙂
 
 ---
-
-- Thank you for helping make this project better! 🙂

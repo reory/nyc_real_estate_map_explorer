@@ -1,5 +1,8 @@
-# This script takes a look at the csv file to make sure
-# the basemodel in USAProperty matches up with it.
+"""
+This script takes a look at the csv file to make sure
+the basemodel in USAProperty matches up with it.
+"""
+
 import pandas as pd
 
 # Load just the first 5 rows to save memory
