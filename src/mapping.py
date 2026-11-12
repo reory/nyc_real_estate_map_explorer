@@ -46,7 +46,7 @@ def generate_full_map(properties=None):
 
     # Helper function to identify missing, blank, or NaN data formats safely
     def is_missing(val):
-        """Check whether a value should be tread as missing."""
+        """Check whether a value should be treated as missing."""
         return (
             val is None
         or (isinstance(val, float) and math.isnan(val))
@@ -85,6 +85,15 @@ def generate_full_map(properties=None):
         lot_val = prop.get("acre_lot")
         p_lot = "N/A" if (is_missing(lot_val) or float(lot_val) <= 0) else f"{float(lot_val):.2f} acres"
 
+        # Format borough name for display
+        borough = prop.get("Borough", "")
+        p_borough = "Staten Island" if borough == "Richmond" else borough
+        p_borough = "N/A" if is_missing(p_borough) else p_borough
+
+        # Format city name
+        city = prop.get("city")
+        p_city = "N/A" if is_missing(city) else city
+
         # Create a HTML popup.
         popup_text = f"""
         <div style="font-family: Arial, sans-serif; min-width: 150px;">
@@ -94,8 +103,8 @@ def generate_full_map(properties=None):
             <b>Baths:</b> {p_bath}<br>
             <b>Living Area:</b> {p_size}<br>
             <b>Lot Size:</b> {p_lot}<br>
-            <b>City:</b> {prop.get('city', 'N/A')}<br>
-            <b>Borough:</b> {prop.get('borough', 'N/A')}<br>
+            <b>City:</b> {p_city}<br>
+            <b>Borough:</b> {p_borough}<br>
         </div>
         """
 
@@ -103,7 +112,7 @@ def generate_full_map(properties=None):
         folium.CircleMarker(
             location=[float(lat), float(lon)],
             radius=5,
-            popup=folium.Popup(popup_text, max_width=200),
+            popup=folium.Popup(popup_text, max_width=275),
             color=color_hex,
             fill=True,
             fill_color=color_hex,

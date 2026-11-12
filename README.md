@@ -24,6 +24,7 @@ The NYC Real Estate Explorer is a high-performance web dashboard engineered to t
 - [Key Features](#-key-features)
 - [Project Structure](#-project-structure)
 - [Getting Started](#-getting-started)
+- [Build The Database](#️-build-the-database)
 - [Launch The Application](#-launch-the-application)
 - [Tech Stack](#-tech-stack)
 - [Troubleshooting](#️-troubleshooting)
@@ -62,6 +63,7 @@ The NYC Real Estate Explorer is a high-performance web dashboard engineered to t
 
 <p align="center">
   <strong>Property Search Dashboard Dark Mode</strong><br>
+
   <img src="screenshots/darkmode.png" alt="Dark Mode" width="90%">
 </p>
 
@@ -75,7 +77,7 @@ The NYC Real Estate Explorer is a high-performance web dashboard engineered to t
 <p align="center">
   <strong>Advanced Market Analytics Dashboard</strong><br>
 
-  Explore borough-level pricing trends with interactive box plots and analyze the relationship between house size and listing price using dynamic Plotly visualizations.
+  Explore borough-level pricing trends with interactive box plots and analyse the relationship between house size and listing price using dynamic Plotly visualisations.
   <img src="screenshots/analyticsadvanced1.png" alt="Advanced Analytics" width="90%">
 </p>
 
@@ -113,7 +115,7 @@ nyc_real_estate_map_explorer/
 │   ├── database.py     # SQLAlchemy Models & Data Retrieval
 │   ├── create_nyc_csv.py # Create CSV file for the project
 │   ├── peek.py         # Peek at the DB to see if it matches with USAProperty model
-│   ├── ingest_data.py  # Initialise the DB
+│   ├── ingest_data.py  # Build and populate the SQLite database
 │   ├── engine.py       # Pandas/SciPy Analysis & Outlier Detection
 │   └── mapping.py      # Folium Map Generation & Cluster Logic
 ├── tests/              # Testing suite
@@ -158,6 +160,30 @@ source venv/bin/activate
 uv sync
 ```
 
+---
+
+## 🗄️ Build the Database
+
+The application uses a local SQLite database generated from the cleaned NYC property dataset.
+
+Run the ingestion pipeline to populate the database:
+
+```bash
+python -m src.ingest_data
+```
+
+This step only needs to be performed when setting up the project for the first time or when rebuilding the database from source data.
+
+You should see output similar to:
+
+```plaintext
+🚀 Starting Ingestion with Coordinate Recovery...
+🔗 Loading New York city properties...
+✅ Saved 10000 properties...
+✅ Saved 20000 properties...
+✅ Saved 30000 properties...
+😁 Done! 36896 properties with coordinates are now in the database.
+```
 ---
 
 ## 🚀 Launch the Application:
@@ -220,7 +246,9 @@ pytest
 
 - [x] Implement a multi-select dropdown in the sidebar to filter listings by specific NYC neighborhoods or boroughs.
 
-- [ ] Create a secondary "Market Insights" tab using `st.tabs` to visualize data, such as average price per square foot or inventory distribution.
+- [ ] Integrate an interactive PyDeck spatial map component with coordinate validation and bounding box filtering for NYC properties.
+
+- [ ] Create a secondary "Market Insights" tab using `st.tabs` to visualise data, such as average price per square foot or inventory distribution.
 
 - [ ] Add a "Compare" button to property popups that allows users to "pin" listings to a session state list.
 

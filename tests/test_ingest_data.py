@@ -17,6 +17,7 @@ def test_ingest_adds_valid_properties(monkeypatch):
         "acre_lot": [0.1],
         "city": ["NYC"],
         "state": ["New York"],
+        "county_name": ["New York"],
         "house_size": [900],
         "prev_sold_date": ["2020-01-01"],
         "lat": [40.75],

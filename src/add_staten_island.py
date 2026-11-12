@@ -24,7 +24,7 @@ try:
         # Read your existing app CSV to match column names perfectly
         target_df = pd.read_csv(target_csv_path)
         
-        # Standardize columns to match what your ingestion script expects
+        # Standardise columns to match what your ingestion script expects
         # (Mapping 'lat' and 'lng' if they are named differently in the large file)
         if 'latitude' in si_rows.columns and 'lat' not in si_rows.columns:
             si_rows['lat'] = si_rows['latitude']

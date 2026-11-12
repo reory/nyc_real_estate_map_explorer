@@ -1,3 +1,4 @@
+
 import streamlit as st
 from sqlalchemy import Column, Float, Integer, String, create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
@@ -58,7 +59,7 @@ def get_filtered_properties(min_price=None, max_price=None):
         results = query.limit(30000).all()
 
         # CONVERSION: Convert SQLAlchemy objects to a list of clean dictionaries
-        # This makes the data lightweight and easy for Streamlit to cache/serialize
+        # This makes the data lightweight and easy for Streamlit to cache/serialise
         clean_results = [
             {
                 "latitude": p.latitude,
@@ -73,6 +74,7 @@ def get_filtered_properties(min_price=None, max_price=None):
             }
             for p in results
         ]
+
         return clean_results
 
     finally:

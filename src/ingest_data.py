@@ -2,7 +2,7 @@ import pandas as pd
 
 from .database import Base, Session, USAProperty, engine
 
-# Initialize the database
+# Initialise the database
 Base.metadata.create_all(engine)
 session = Session()
 
@@ -35,6 +35,7 @@ def ingest():
             acre_lot=row["acre_lot"],
             city=row["city"],
             state=row["state"],
+            county_name=row["county_name"],
             zip_code=str(row["zip_code"]).split(".")[0].zfill(5),
             house_size=row["house_size"],
             prev_sold_date=str(row["prev_sold_date"]),

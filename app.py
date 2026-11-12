@@ -14,6 +14,8 @@ from src.database import get_filtered_properties
 from src.engine import analyse_properties
 from src.mapping import generate_full_map
 
+# Maximum property price supported by the dashboard
+MAX_PRICE_LIMIT = 10_000_000
 
 def apply_local_css(file_path):
     """Function to inject custom CSS safely."""
@@ -54,11 +56,11 @@ st.markdown(
 # App header title
 st.title("🏡 NYC Real Estate Explorer")
 
-# Initialize session state for filters
+# Initialise session state for filters
 if "min_price" not in st.session_state:
     st.session_state.min_price = 0
 if "max_price" not in st.session_state:
-    st.session_state.max_price = 1500000
+    st.session_state.max_price = MAX_PRICE_LIMIT
 if "filtered_data" not in st.session_state:
     st.session_state.filtered_data = None
 if "show_map" not in st.session_state:
@@ -67,10 +69,19 @@ if "show_map" not in st.session_state:
 # Sidebar Controls
 st.sidebar.header("Filter Properties")
 min_price = st.sidebar.slider(
-    "Min Price", 0, 1500000, st.session_state.min_price
+    "Min Price", 
+    0, 
+    MAX_PRICE_LIMIT, 
+    st.session_state.min_price,
+    format="$%,d"
 )
+
 max_price = st.sidebar.slider(
-    "Max Price", 0, 1500000, st.session_state.max_price
+    "Max Price", 
+    0, 
+    MAX_PRICE_LIMIT, 
+    st.session_state.max_price,
+    format="$%,d"
 )
 
 # Borough dropdown
@@ -107,6 +118,7 @@ if st.session_state.show_map and st.session_state.filtered_data is not None:
 
         # Borough dropdown filter
         processed_df["Borough"] = processed_df.apply(clean_borough_name, axis=1)
+
         if borough_filter != "All Boroughs":
             if borough_filter == "The Bronx":
                 target_name = "Bronx"
