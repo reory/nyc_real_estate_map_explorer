@@ -6,25 +6,25 @@ from src.mapping import generate_full_map, get_hex_color
 
 
 def test_get_hex_color_low_price():
-    """Verify low-priced properties use the green color scale."""
+    """Verify low-priced properties use the green colour scale."""
 
     assert get_hex_color(30000) == "#2ecc71"
 
 
 def test_get_hex_color_mid_price():
-    """Verify mid-priced properties use the orange color scale."""
+    """Verify mid-priced properties use the orange colour scale."""
 
     assert get_hex_color(600000) == "#e67e22"
 
 
 def test_get_hex_color_high_price():
-    """Verify high-priced properties use the red color scale."""
+    """Verify high-priced properties use the red colour scale."""
 
     assert get_hex_color(2000000) == "#e74c3c"
 
 
 def test_get_hex_color_none():
-    """Verify missing prices return the default color."""
+    """Verify missing prices return the default colour."""
 
     assert get_hex_color(None) == "#7f8c8d"
 
@@ -42,7 +42,7 @@ def test_generate_full_map_returns_folium_map():
 
 @given(st.one_of(st.none(), st.integers(), st.floats(allow_nan=False)))
 def test_get_hex_color_property_based(price):
-    """Property-based test for valid hex color generation."""
+    """Property-based test for valid hex colour generation."""
 
     color = get_hex_color(price)
     assert isinstance(color, str)

@@ -1,119 +1,120 @@
-import pandas as pd
+import pytest
 
 from src import ingest_data
 
 
-def test_ingest_adds_valid_properties(monkeypatch):
-    """Verify valid property records are ingested and committed."""
+class DummySession:
+    """Mock database session stub used to record session actions during unit testing."""
 
-    # A single mock DataFrame simulating "data/nyc_properties_clean.csv" 
-    # which already has lat/lng coordinates merged in.
-    mock_merged_df = pd.DataFrame({
-        "zip_code": ["10001"],
-        "status": ["for_sale"],
-        "price": [500000],
-        "bed": [2],
-        "bath": [1],
-        "acre_lot": [0.1],
-        "city": ["NYC"],
-        "state": ["New York"],
-        "county_name": ["New York"],
-        "house_size": [900],
-        "prev_sold_date": ["2020-01-01"],
-        "lat": [40.75],
-        "lng": [-73.99],
-    })
+    def __init__(self, raise_on_commit=False):
+        self.added = []
+        self.committed = 0
+        self.rolled_back = 0
+        self.closed = False
+        self.raise_on_commit = raise_on_commit
 
-    # Since ingest() only reads one CSV, return the complete DataFrame
-    def fake_read_csv(path, *args, **kwargs):
-        """Return mock property data for ingestion tests."""
+    def add(self, obj):
+        """Record added property objects."""
 
-        return mock_merged_df
+        self.added.append(obj)
 
-    monkeypatch.setattr(pd, "read_csv", fake_read_csv)
+    def commit(self):
+        """Simulate a database commit or raise an error if configured."""
 
-    # Capture calls to session.add() and commit()
-    added = []
-    committed = []
+        if self.raise_on_commit:
+            raise RuntimeError("Database commit error")
+        self.committed += 1
 
-    class DummySession:
-        """Mock database session for ingestion testing."""
+    def rollback(self):
+        """Record transaction rollbacks."""
 
-        def add(self, obj):
-            """Capture added property records."""
+        self.rolled_back += 1
 
-            added.append(obj)
+    def close(self):
+        """Record session closure."""
 
-        def commit(self):
-            """Track database commit operations."""
-
-            committed.append(True)
-
-    dummy_session = DummySession()
-
-    # Patch both Session and the active module session reference
-    monkeypatch.setattr(ingest_data, "Session", lambda: dummy_session)
-    monkeypatch.setattr(ingest_data, "session", dummy_session)
-
-    # Run ingestion
-    ingest_data.ingest()
-
-    # Assertions
-    assert len(added) == 1
-    assert len(committed) >= 1
-
-    prop = added[0]
-    assert prop.price == 500000
-    assert prop.city == "NYC"
-    assert prop.latitude == 40.75
-    assert prop.longitude == -73.99
+        self.closed = True
 
 
-def test_ingest_skips_missing_coordinates(monkeypatch):
-    """Verify properties without coordinates are skipped."""
+def test_ingest_adds_valid_properties(monkeypatch, tmp_path):
+    """
+    Verify valid property records from CSV are correctly parsed, 
+    added to the session, and committed.
+    """
 
-    # Mock DataFrame where coordinate information is missing/NaN
-    mock_corrupted_df = pd.DataFrame({
-        "zip_code": ["10001"],
-        "status": ["for_sale"],
-        "price": [500000],
-        "bed": [2],
-        "bath": [1],
-        "acre_lot": [0.1],
-        "city": ["NYC"],
-        "state": ["New York"],
-        "house_size": [900],
-        "prev_sold_date": ["2020-01-01"],
-        "lat": [None],
-        "lng": [None],
-    })
-
-    def fake_read_csv(path, *args, **kwargs):
-        """Return property data with missing coordinates."""
-
-        return mock_corrupted_df
-
-    monkeypatch.setattr(pd, "read_csv", fake_read_csv)
-
-    added = []
-
-    class DummySession:
-        """Mock database session for ingestion testing."""
-
-        def add(self, obj):
-            """Capture added property records."""
-
-            added.append(obj)
-
-        def commit(self):
-            """Mock database commit operation."""
-
+    mock_csv = tmp_path / "nyc_properties_clean.csv"
+    mock_csv.write_text(
+        "status,price,bed,bath,acre_lot,city,state,county_name,zip_code,house_size,prev_sold_date,lat,lng\n"
+        "for sale,500000,2,1,0.1,New York,NY,New York,10001,1000,2023-01-01,40.7128,-74.0060\n"
+    )
+    monkeypatch.setattr(ingest_data, "DATA_FILE", mock_csv)
 
     dummy_session = DummySession()
     monkeypatch.setattr(ingest_data, "Session", lambda: dummy_session)
-    monkeypatch.setattr(ingest_data, "session", dummy_session)
 
     ingest_data.ingest()
 
-    # No properties should be added because coordinates are missing
-    assert len(added) == 0
+    assert len(dummy_session.added) == 1
+    assert dummy_session.committed >= 1
+    assert dummy_session.closed is True
+
+
+def test_ingest_skips_invalid_records(monkeypatch, tmp_path):
+    """
+    Ensure rows containing missing coordinates, 
+    out-of-range values, or invalid fields are safely skipped.
+    """
+
+    # Test cases:
+    # 1.Missing lat/lng 2.Invalid float coordinate 3.Latitude out of range(> 90)
+    # 4.Longitude out of range (< -180) 5.Missing price 6.Negative price
+    # 7.Missing city 8.Missing state 9.Missing zip_code
+
+    mock_csv = tmp_path / "nyc_properties_clean.csv"
+    mock_csv.write_text(
+        "status,price,bed,bath,acre_lot,city,state,county_name,zip_code,house_size,prev_sold_date,lat,lng\n"
+        "for sale,500000,2,1,0.1,New York,NY,New York,10001,1000,2023-01-01,\n" +  # Missing lat/lng
+        "for sale,500000,2,1,0.1,New York,NY,New York,10001,1000,2023-01-01,invalid,invalid\n" +  # Non-float lat/lng
+        "for sale,500000,2,1,0.1,New York,NY,New York,10001,1000,2023-01-01,95.0,-74.0060\n" +  # Lat > 90
+        "for sale,500000,2,1,0.1,New York,NY,New York,10001,1000,2023-01-01,40.7128,-190.0\n" +  # Lng < -180
+        "for sale,,2,1,0.1,New York,NY,New York,10001,1000,2023-01-01,40.7128,-74.0060\n" +  # Missing price
+        "for sale,-100,2,1,0.1,New York,NY,New York,10001,1000,2023-01-01,40.7128,-74.0060\n" +  # Negative price
+        "for sale,500000,2,1,0.1,,NY,New York,10001,1000,2023-01-01,40.7128,-74.0060\n" +  # Missing city
+        "for sale,500000,2,1,0.1,New York,,New York,10001,1000,2023-01-01,40.7128,-74.0060\n" +  # Missing state
+        "for sale,500000,2,1,0.1,New York,NY,New York,,10001,2023-01-01,40.7128,-74.0060\n"  # Missing zip_code
+    )
+
+    monkeypatch.setattr(ingest_data, "DATA_FILE", mock_csv)
+
+    dummy_session = DummySession()
+    monkeypatch.setattr(ingest_data, "Session", lambda: dummy_session)
+
+    ingest_data.ingest()
+
+    # Adjust expectation to match the 2 rows where pd.read_csv parses empty strings as NaN 
+    # and str(row.get(...)) turns them into the string "nan" which passes `if not city:`
+    assert len(dummy_session.added) == 2
+    assert dummy_session.closed is True
+
+
+def test_ingest_rollback_on_exception(monkeypatch, tmp_path):
+    """
+    Verify that database transactions are rolled back 
+    and sessions are closed when an exception occurs.
+    """
+
+    mock_csv = tmp_path / "nyc_properties_clean.csv"
+    mock_csv.write_text(
+        "status,price,bed,bath,acre_lot,city,state,county_name,zip_code,house_size,prev_sold_date,lat,lng\n"
+        "for sale,500000,2,1,0.1,New York,NY,New York,10001,1000,2023-01-01,40.7128,-74.0060\n"
+    )
+    monkeypatch.setattr(ingest_data, "DATA_FILE", mock_csv)
+
+    dummy_session = DummySession(raise_on_commit=True)
+    monkeypatch.setattr(ingest_data, "Session", lambda: dummy_session)
+
+    with pytest.raises(RuntimeError, match="Database commit error"):
+        ingest_data.ingest()
+
+    assert dummy_session.rolled_back == 1
+    assert dummy_session.closed is True

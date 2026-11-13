@@ -108,16 +108,17 @@ The NYC Real Estate Explorer is a high-performance web dashboard engineered to t
 
 ```plaintext
 nyc_real_estate_map_explorer/
-├── assets/             # Logos, icons, and custom CSS
-├── data/               # SQLite Databases & Source CSV files
-├── screenshots/        # Screenshots of the Dashboard in action
-├── src/                # Source Code folder
-│   ├── database.py     # SQLAlchemy Models & Data Retrieval
-│   ├── create_nyc_csv.py # Create CSV file for the project
-│   ├── peek.py         # Peek at the DB to see if it matches with USAProperty model
-│   ├── ingest_data.py  # Build and populate the SQLite database
-│   ├── engine.py       # Pandas/SciPy Analysis & Outlier Detection
-│   └── mapping.py      # Folium Map Generation & Cluster Logic
+├── assets/                # Logos, icons, and custom CSS
+├── data/                  # SQLite Databases & Source CSV files
+├── screenshots/           # Screenshots of the Dashboard in action
+├── src/                   # Source Code folder
+│   ├── database.py        # SQLAlchemy Models & Data Retrieval
+│   ├── create_nyc_csv.py  # Create CSV file for the project
+│   ├── peek.py            # Peek at the DB to see if it matches with USAProperty model
+│   ├── ingest_data.py     # Build and populate the SQLite database
+│   ├── logging_config.py  # Logging configuration file
+│   ├── engine.py          # Pandas/SciPy Analysis & Outlier Detection
+│   └── mapping.py         # Folium Map Generation & Cluster Logic
 ├── tests/              # Testing suite
 ├── app.py              # Main Application Orchestrator
 ├── CONTRIBUTING.md     # Contribute to project
@@ -246,14 +247,14 @@ pytest
 
 - [x] Implement a multi-select dropdown in the sidebar to filter listings by specific NYC neighborhoods or boroughs.
 
-- [ ] Integrate an interactive PyDeck spatial map component with coordinate validation and bounding box filtering for NYC properties.
-
 - [ ] Create a secondary "Market Insights" tab using `st.tabs` to visualise data, such as average price per square foot or inventory distribution.
 
 - [ ] Add a "Compare" button to property popups that allows users to "pin" listings to a session state list.
 
 - [ ] Integrate a `st.download_button` that allows users to export the current filtered dataset into a `CSV` file.
 Provides high-value offline utility, enabling users to move their research into `Excel` or `Google` Sheets for deeper personal analysis.
+
+- [ ] Integrate an interactive PyDeck spatial map component with coordinate validation and bounding box filtering for NYC properties.
 
 ---
 

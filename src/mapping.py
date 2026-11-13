@@ -6,7 +6,7 @@ from folium.plugins import MarkerCluster
 
 
 def get_hex_color(price):
-    """Returns a hex color string based on NYC real estate price tiers."""
+    """Returns a hex colour string based on NYC real estate price tiers."""
 
     # Missing data - not listed.
     if price is None or (isinstance(price, float) and math.isnan(price)):
@@ -47,6 +47,7 @@ def generate_full_map(properties=None):
     # Helper function to identify missing, blank, or NaN data formats safely
     def is_missing(val):
         """Check whether a value should be treated as missing."""
+
         return (
             val is None
         or (isinstance(val, float) and math.isnan(val))

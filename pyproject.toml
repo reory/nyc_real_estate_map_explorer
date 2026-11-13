@@ -6,16 +6,20 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "folium==0.20.0",
-    "hypothesis==6.155.1",
     "pandas==3.0.3",
     "plotly==6.8.0",
-    "pytest==9.0.3",
-    "pytest-cov==7.1.0",
     "scipy==1.17.1",
     "sqlalchemy==2.0.50",
     "sqlalchemy-orm==1.2.10",
     "streamlit==1.58.0",
     "streamlit-folium==0.27.2",
+]
+
+[dependency-groups]
+test = [
+    "hypotheis==6.155.1",
+    "pytest==9.0.3",
+    "pytest-cov==7.1.0",
 ]
 
 [tool.pytest.ini_options]
@@ -36,4 +40,7 @@ markers = [
 filterwarnings = [
     "ignore::DeprecationWarning",
     "ignore::UserWarning:streamlit.*",
+    "ignore:overflow encountered in square:RuntimeWarning",
+    "ignore:overflow encountered in multiply:RuntimeWarning",
+    "ignore:invalid value encountered in subtract:RuntimeWarning",
 ]

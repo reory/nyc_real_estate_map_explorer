@@ -7,7 +7,7 @@ def clean_borough_name(row):
     their official 5 boroughs using a high-speed lookup map.
     """
 
-    # Standardize inputs
+    # Standardise inputs
     city = str(row.get("city", "")).strip().title()  # e.g., "bed stuy" -> "Bed Stuy"
     county = str(row.get("county_name", "")).lower().strip()
     

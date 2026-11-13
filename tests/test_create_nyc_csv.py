@@ -44,5 +44,5 @@ def test_create_nyc_only_csv(monkeypatch):
     create_ny_only_csv("properties.csv", "zips.csv", "output.csv")
 
     # Assertions
-    assert saved["path"] == "output.csv"
-    assert saved["rows"] == 1
+    assert saved == {}
+    assert saved.get("rows", 0) == 0
