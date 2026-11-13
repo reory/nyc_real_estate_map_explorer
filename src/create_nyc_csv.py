@@ -3,18 +3,21 @@ import os
 
 import pandas as pd
 
+from src.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 def create_ny_only_csv(properties_csv_path, zips_csv_path, output_csv_path):
     """Filter dataset to NY cases and save as CSV with robust validation."""
 
-    print("🧹 Filtering for New York only...")
+    logger.info("🧹 Filtering for New York only...")
 
     # File existence checks
     if not os.path.exists(properties_csv_path):
-        print(f"I am not certain: The properties file at '{properties_csv_path}' was not found.")
+        logger.info(f"The properties file at '{properties_csv_path}' was not found.")
         return
     if not os.path.exists(zips_csv_path):
-        print(f"I am not certain: The zip code reference file at '{zips_csv_path}' was not found.")
+        logger.info(f"The zip code reference file at '{zips_csv_path}' was not found.")
         return
 
     try:
@@ -23,10 +26,10 @@ def create_ny_only_csv(properties_csv_path, zips_csv_path, output_csv_path):
         zips_df = pd.read_csv(zips_csv_path, low_memory=False)
 
     except (FileNotFoundError, PermissionError) as e:
-        print(f"File access error encountered: {e}")
+        logger.error(f"File access error encountered: {e}")
 
     except pd.errors.ParserError as e:
-        print(f"Failed to parse CSV formatting: {e}")
+        logger.error(f"Failed to parse CSV formatting: {e}")
         return
 
     # 3. Schema validation (required columns check)
@@ -35,12 +38,12 @@ def create_ny_only_csv(properties_csv_path, zips_csv_path, output_csv_path):
 
     for col in required_prop_cols:
         if col not in prop_df.columns:
-            print(f"Required column '{col}' missing from properties dataset.")
+            logger.error(f"Required column '{col}' missing from properties dataset.")
             return
 
     for col in required_zip_cols:
         if col not in zips_df.columns:
-            print(f"Required column '{col}' missing from zip reference dataset.")
+            logger.error(f"Required column '{col}' missing from zip reference dataset.")
             return
 
 
@@ -61,10 +64,10 @@ def create_ny_only_csv(properties_csv_path, zips_csv_path, output_csv_path):
     nyc_zips = zips_df[(zips_df["state_id"] == "NY") & (zips_df["county_name"].isin(nyc_counties))]
 
     if nyc_zips.empty:
-        print("No ZIP codes matched the specified NY counties in the reference dataset.")
+        logger.error("No ZIP codes matched the specified NY counties in the reference dataset.")
         return
 
-    print(f" Filtering listings against {len(nyc_zips)} official NYC ZIP codes..")
+    logger.info(f" Filtering listings against {len(nyc_zips)} official NYC ZIP codes..")
 
     # Merge the two CSV's together on the ZIP code column
     nyc_properties = pd.merge(
@@ -90,7 +93,7 @@ def create_ny_only_csv(properties_csv_path, zips_csv_path, output_csv_path):
 
     # Save the NYC file
     nyc_properties.to_csv(output_csv_path, index=False)
-    print(f" Success! created {output_csv_path} with {len(nyc_properties):,} rows restricted entirely to NYC.")
+    logger.info(f" Success! created {output_csv_path} with {len(nyc_properties):,} rows restricted entirely to NYC.")
 
 
 # Build cleaned NYC property dataset

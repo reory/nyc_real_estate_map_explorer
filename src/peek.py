@@ -7,6 +7,10 @@ from pathlib import Path
 
 import pandas as pd
 
+from src.logging_config import get_logger
+
+logger = get_logger(__name__)
+
 DATA_FILE = Path("data_ny_properties_only.csv")
 
 
@@ -34,7 +38,7 @@ def main():
     """
 
     df = preview_data()
-    print(df.head())
+    logger.info(df.head())
 
 
 if __name__ == '__main__':

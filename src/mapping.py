@@ -4,6 +4,9 @@ import folium
 import streamlit as st
 from folium.plugins import MarkerCluster
 
+from src.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 def get_hex_color(price):
     """Returns a hex colour string based on NYC real estate price tiers."""
@@ -30,7 +33,7 @@ def generate_full_map(properties=None):
     """Build complete NYC map with all scraped case markers"""
 
     if not properties:
-        print("⚠️ No properties found!")
+        logger.warning("⚠️ No properties found!")
         return None
 
     # Start the folium map.

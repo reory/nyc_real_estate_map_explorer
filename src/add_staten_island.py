@@ -2,6 +2,10 @@ from pathlib import Path
 
 import pandas as pd
 
+from src.logging_config import get_logger
+
+logger = get_logger(__name__)
+
 DATA_DIR = Path("data")
 
 # Define paths (Adjust the large file name if it's different!)
@@ -15,7 +19,7 @@ def add_staten_island_data():
     the raw dataset and append them to the clean target CSV.
     """
 
-    print("🔍 Searching for Staten Island data...")
+    logger.info("🔍 Searching for Staten Island data...")
 
     # Read your existing app CSV to match column names perfectly
     large_df = pd.read_csv(LARGE_CSV)
@@ -38,7 +42,7 @@ def add_staten_island_data():
 
     
     if si_rows.empty:
-        print("❌ Could not find Staten Island rows in the large CSV file.")
+        logger.warning("❌ Could not find Staten Island rows in the large CSV file.")
         return 0
 
     # Standardise columns to match what your ingestion script expects
@@ -70,8 +74,8 @@ def add_staten_island_data():
 
     temp_file.replace(TARGET_CSV)
         
-    print(f"🎉 Success! Added {len(si_rows):,} rows")
-    print(f"📂 Updated file saved at: {TARGET_CSV}")
+    logger.info(f"🎉 Success! Added {len(si_rows):,} rows")
+    logger.info(f"📂 Updated file saved at: {TARGET_CSV}")
 
 
 if __name__ == '__main__':
@@ -86,5 +90,5 @@ if __name__ == '__main__':
         pd.errors.EmptyDataError,
         pd.errors.ParserError,
         ) as exc:
-        print(f"❌ Error occurred: {exc}")
+        logger.error(f"❌ Error occurred: {exc}")
 

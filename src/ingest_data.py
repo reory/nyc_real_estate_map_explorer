@@ -2,7 +2,11 @@ from pathlib import Path
 
 import pandas as pd
 
+from src.logging_config import get_logger
+
 from .database import Base, Session, USAProperty, engine
+
+logger = get_logger(__name__)
 
 DATA_FILE = (
     Path(__file__).resolve().parent.parent
@@ -21,12 +25,12 @@ def ingest():
 
     session = Session()
 
-    print("🚀 Starting Ingestion with Coordinate Recovery...")
+    logger.info("🚀 Starting Ingestion with Coordinate Recovery...")
 
     try:
 
         # Merge coordinates onto properties
-        print("🔗 Loading New York city properties...")
+        logger.info("🔗 Loading New York city properties...")
 
         merged = pd.read_csv(DATA_FILE)
 
@@ -113,12 +117,12 @@ def ingest():
             # Commit in batches of 10,000 for speed
             if inserted % BATCH_SIZE == 0:
                 session.commit()
-                print(f"✅ Saved {inserted:,} properties...")
+                logger.info(f"✅ Saved {inserted:,} properties...")
 
         # Final commit for any remaining records
         session.commit()
 
-        print("😁 Done! " 
+        logger.info("😁 Done! " 
             f"{inserted} properties. " 
             f"Skipped {skipped} invalid records."
         )

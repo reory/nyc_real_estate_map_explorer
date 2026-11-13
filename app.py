@@ -65,6 +65,16 @@ if "slider_max" not in st.session_state:
     st.session_state.slider_max = MAX_PRICE_LIMIT
 if "borough_select" not in st.session_state:
     st.session_state.borough_select = "All Boroughs"
+if "price_error" not in st.session_state:
+    st.session_state.price_error = False
+
+# Display a prominent error banner in the main content area if the price range is invalid
+if st.session_state.price_error:
+    st.error(
+        "⚠️**Invalid Price Range:** Minimum price cannot exceed Maximum price. "
+        "Please adjust your sliders so that the Minimum price is less than or "
+        "equal to the Maximum price."
+    )
 
 # Sidebar price and borough filters
 st.sidebar.header("Filter Properties")
@@ -96,6 +106,14 @@ borough_filter = st.sidebar.selectbox(
 def apply_filters():
     """Apply user filters and refresh property results."""
 
+    # Gracefully intercept invalid price bounds
+    if min_price > max_price:
+        st.session_state.price_error = True
+        st.session_state.filtered_data = None
+        st.session_state.show_map = False
+        return
+
+    st.session_state.price_error = False
     st.session_state.min_price = min_price
     st.session_state.max_price = max_price
     st.session_state.filtered_data = get_filtered_properties(
@@ -113,6 +131,7 @@ def reset_filters():
     st.session_state.borough_select = "All Boroughs"
     st.session_state.filtered_data = None
     st.session_state.show_map = False
+    st.session_state.price_error = False
 
 
 # Sidebar action buttons (Apply and Reset)

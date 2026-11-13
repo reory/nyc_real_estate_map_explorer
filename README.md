@@ -247,14 +247,19 @@ pytest
 
 - [x] Implement a multi-select dropdown in the sidebar to filter listings by specific NYC neighborhoods or boroughs.
 
-- [ ] Create a secondary "Market Insights" tab using `st.tabs` to visualise data, such as average price per square foot or inventory distribution.
+- [ ] Integrate a `st.download_button` that allows users to export the current filtered dataset into a `CSV` file, providing instant offline utility for `Excel` or `Google` Sheets analysis.
 
-- [ ] Add a "Compare" button to property popups that allows users to "pin" listings to a session state list.
+- [ ] Add a Quick-Stats KPI summary banner right above the map displaying high-level metrics for the filtered dataset (e.g., total listings, average price, and median price/sqft).
 
-- [ ] Integrate a `st.download_button` that allows users to export the current filtered dataset into a `CSV` file.
-Provides high-value offline utility, enabling users to move their research into `Excel` or `Google` Sheets for deeper personal analysis.
+- [ ] Integrate an interactive mortgage and affordability calculator widget in the sidebar for down payment, interest rate, and estimated monthly payments.
 
-- [ ] Integrate an interactive PyDeck spatial map component with coordinate validation and bounding box filtering for NYC properties.
+- [ ] Implement a Favorites/Wishlist feature allowing users to save preferred listings to session state and view them in a dedicated sidebar section.
+
+- [ ] Add a "Compare" button to property popups that allows users to "pin" listings to a session state list for side-by-side evaluation.
+
+- [ ] Create a secondary "Market Insights" tab using `st.tabs` to organize analytics, price distributions, and inventory charts away from the main map view.
+
+- [ ] Integrate an interactive `PyDeck` spatial map component with coordinate validation and advanced 3D column layers for dense NYC property visualization.
 
 ---
 
