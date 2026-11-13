@@ -1,3 +1,5 @@
+import logging
+
 import pandas as pd
 import pytest
 
@@ -6,14 +8,14 @@ from src import add_staten_island
 
 def test_add_staten_island_success(monkeypatch, tmp_path):
     """
-    Verify Staten Island rows are successfully extracted, 
+    Verify Staten Island rows are successfully extracted,
     standardised, and appended to the target dataset.
     """
 
     # Setup temporary data files and directory
     data_dir = tmp_path / "data"
     data_dir.mkdir()
-    
+
     large_csv = data_dir / "ny_properties_only.csv"
     target_csv = data_dir / "nyc_properties_clean.csv"
 
@@ -37,6 +39,7 @@ def test_add_staten_island_success(monkeypatch, tmp_path):
 
     # Verify target CSV was updated with Staten Island row and lat/lng standardised
     updated_df = pd.read_csv(target_csv)
+
     assert len(updated_df) == 2
     assert "Staten Island" in updated_df["city"].values
     assert "lat" in updated_df.columns
@@ -45,18 +48,22 @@ def test_add_staten_island_success(monkeypatch, tmp_path):
 
 def test_add_staten_island_missing_columns(monkeypatch, tmp_path):
     """
-    Ensure a ValueError is raised when required 
+    Ensure a ValueError is raised when required
     schema columns are missing from the source data.
     """
 
     data_dir = tmp_path / "data"
     data_dir.mkdir()
-    
+
     large_csv = data_dir / "ny_properties_only.csv"
     target_csv = data_dir / "nyc_properties_clean.csv"
 
-    # Large CSV missing 'state' column
-    large_csv.write_text("city,price\nStaten Island,450000\n")
+    # Large CSV missing required 'state' column
+    large_csv.write_text(
+        "city,price\n"
+        "Staten Island,450000\n"
+    )
+
     target_csv.write_text("state,city,price\n")
 
     monkeypatch.setattr(add_staten_island, "LARGE_CSV", large_csv)
@@ -66,27 +73,32 @@ def test_add_staten_island_missing_columns(monkeypatch, tmp_path):
         add_staten_island.add_staten_island_data()
 
 
-def test_add_staten_island_no_matches(monkeypatch, tmp_path, capsys):
+def test_add_staten_island_no_matches(monkeypatch, tmp_path, caplog):
     """
-    Confirm graceful handling and 
+    Confirm graceful handling and
     zero rows added when no Staten Island records are found.
     """
 
+    caplog.set_level(logging.WARNING)
+
     data_dir = tmp_path / "data"
     data_dir.mkdir()
-    
+
     large_csv = data_dir / "ny_properties_only.csv"
     target_csv = data_dir / "nyc_properties_clean.csv"
 
     # No Staten Island matching rows
-    large_csv.write_text("state,city,price\nNew York,Albany,300000\n")
+    large_csv.write_text(
+        "state,city,price\n"
+        "New York,Albany,300000\n"
+    )
+
     target_csv.write_text("state,city,price\n")
 
     monkeypatch.setattr(add_staten_island, "LARGE_CSV", large_csv)
     monkeypatch.setattr(add_staten_island, "TARGET_CSV", target_csv)
 
     added_count = add_staten_island.add_staten_island_data()
+
     assert added_count == 0
-    
-    captured = capsys.readouterr()
-    assert "Could not find Staten Island rows" in captured.out
+    assert "Could not find Staten Island rows" in caplog.text

@@ -17,6 +17,7 @@ __pycache__/
 *.ruff_cache/
 *.hypothesis/
 *.xml
+*.coverage
 
 # --- IDE & OS Junk ---
 .DS_Store
